@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 
 # Backend API URL (replace with your Fly.io URL after deployment)
-API_URL = "https://hichri-java-grader.fly.dev"  # Update this!
+API_URL = "https://java-grader-backend.fly.dev"  # Update this!
 
 st.set_page_config(page_title="Prof. Haikel Hichri Java Lab", page_icon="☕", layout="wide")
 
