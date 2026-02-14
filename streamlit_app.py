@@ -101,39 +101,79 @@ elif page == "View My Grades":
 elif page == "Admin Dashboard":
     st.header("🔒 Admin Dashboard")
     
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
+    # Initialize session state for login
+    if "admin_logged_in" not in st.session_state:
+        st.session_state.admin_logged_in = False
+        st.session_state.admin_username = ""
+        st.session_state.admin_password = ""
     
-    if st.button("Login"):
+    # Login form
+    if not st.session_state.admin_logged_in:
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        
+        if st.button("Login"):
+            try:
+                resp = requests.get(
+                    f"{API_URL}/admin/all_submissions",
+                    auth=(username, password)
+                )
+                if resp.status_code == 200:
+                    st.session_state.admin_logged_in = True
+                    st.session_state.admin_username = username
+                    st.session_state.admin_password = password
+                    st.rerun()
+                else:
+                    st.error("❌ Invalid credentials")
+            except Exception as e:
+                st.error(f"Login failed: {e}")
+    
+    # Show dashboard if logged in
+    else:
+        col1, col2 = st.columns([6, 1])
+        with col1:
+            st.success(f"✅ Logged in as {st.session_state.admin_username}")
+        with col2:
+            if st.button("Logout"):
+                st.session_state.admin_logged_in = False
+                st.rerun()
+        
         try:
+            # Fetch all submissions
             resp = requests.get(
                 f"{API_URL}/admin/all_submissions",
-                auth=(username, password)
+                auth=(st.session_state.admin_username, st.session_state.admin_password)
             )
+            
             if resp.status_code == 200:
                 data = resp.json()
-                st.success(f"✅ Logged in. Total submissions: {data['total']}")
+                st.info(f"Total submissions: {data['total']}")
                 
                 if data["submissions"]:
                     df = pd.DataFrame(data["submissions"])
                     st.dataframe(df, use_container_width=True)
                     
-                    # Export CSV button
+                    # Fetch CSV for download
                     csv_resp = requests.get(
                         f"{API_URL}/admin/export_csv",
-                        auth=(username, password)
+                        auth=(st.session_state.admin_username, st.session_state.admin_password)
                     )
+                    
                     if csv_resp.status_code == 200:
                         csv_data = csv_resp.json()["csv"]
                         st.download_button(
-                            label="📥 Download CSV",
+                            label="📥 Download CSV with Feedback",
                             data=csv_data,
                             file_name="grades.csv",
-                            mime="text/csv"
+                            mime="text/csv",
+                            type="primary"
                         )
                 else:
                     st.info("No submissions yet.")
             else:
-                st.error("❌ Invalid credentials")
+                st.error("Session expired. Please login again.")
+                st.session_state.admin_logged_in = False
+                st.rerun()
+                
         except Exception as e:
-            st.error(f"Login failed: {e}")
+            st.error(f"Error loading dashboard: {e}")
