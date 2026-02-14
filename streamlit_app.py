@@ -119,19 +119,18 @@ elif page == "Admin Dashboard":
                     st.dataframe(df, use_container_width=True)
                     
                     # Export CSV button
-                    if st.button("Export as CSV"):
-                        csv_resp = requests.get(
-                            f"{API_URL}/admin/export_csv",
-                            auth=(username, password)
+                    csv_resp = requests.get(
+                        f"{API_URL}/admin/export_csv",
+                        auth=(username, password)
+                    )
+                    if csv_resp.status_code == 200:
+                        csv_data = csv_resp.json()["csv"]
+                        st.download_button(
+                            label="📥 Download CSV",
+                            data=csv_data,
+                            file_name="grades.csv",
+                            mime="text/csv"
                         )
-                        if csv_resp.status_code == 200:
-                            csv_data = csv_resp.json()["csv"]
-                            st.download_button(
-                                "Download CSV",
-                                csv_data,
-                                "grades.csv",
-                                "text/csv"
-                            )
                 else:
                     st.info("No submissions yet.")
             else:
