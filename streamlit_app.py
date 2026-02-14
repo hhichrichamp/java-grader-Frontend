@@ -30,7 +30,7 @@ if page == "Submit Lab":
         except Exception as e:
             st.error(f"Connection error: {e}")
     
-    lab_id = st.selectbox("Select Lab", ["lab01", "lab02", "lab03", "lab04"])
+    lab_id = st.selectbox("Select Lab", ["lab04", "lab03", "lab02", "lab01"])
     
     # File uploader for multiple .java files
     uploaded_files = st.file_uploader(
