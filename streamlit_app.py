@@ -29,8 +29,9 @@ if page == "Submit Lab":
                 st.error("❌ Student ID not found. Please check with your instructor.")
         except Exception as e:
             st.error(f"Connection error: {e}")
-    
-    lab_id = st.selectbox("Select Lab", ["lab04", "lab03", "lab02", "lab01"])
+    ####################################################################################
+    lab_id = st.selectbox("Select Lab", ["lab05", "lab04", "lab03", "lab02", "lab01"])
+    #######################################################################################
     
     # File uploader for multiple .java files
     uploaded_files = st.file_uploader(
