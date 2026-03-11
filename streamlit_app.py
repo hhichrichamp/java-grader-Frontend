@@ -31,16 +31,16 @@ if page == "Submit Lab":
             st.error(f"Connection error: {e}")
     ####################################################################################
     lab_id = st.selectbox("Select Lab", ["lab05", "lab04", "lab03", "lab02", "lab01"])
-    #######################################################################################
+    
     
     # File uploader for multiple .java files
     uploaded_files = st.file_uploader(
-        "Upload your .java files (e.g., Employee.java, ProductionWorker.java)",
+        "Upload your .java files of the Campus Fleet Management System",
         type=["java"],
         accept_multiple_files=True,
         help="For labs with multiple classes, upload all required .java files"
     )
-    
+    #######################################################################################
     if st.button("Submit", type="primary"):
         if not student_id:
             st.error("Please enter your Student ID")
