@@ -30,8 +30,14 @@ if page == "Submit Lab":
         except Exception as e:
             st.error(f"Connection error: {e}")
     ####################################################################################
-    lab_id = st.selectbox("Select Lab", ["lab05", "lab04", "lab03", "lab02", "lab01"])
-    problem_id = st.selectbox("Select Problem", ["p1", "p2", "p3", "p4"])
+    lab_id = st.selectbox("Select Lab", ["lab06", "lab05", "lab04", "lab03", "lab02", "lab01"])
+    # 2. Select Problem (only show for Lab 06 or others with multiple problems)
+    problem_id = "none"
+    if lab_id == "lab06":
+        problem_id = st.selectbox("Select Problem", ["p1", "p2", "p3", "p4"])
+    else:
+        # For older labs that don't have sub-problems
+        problem_id = "none"
     
     # File uploader for multiple .java files
     uploaded_files = st.file_uploader(
