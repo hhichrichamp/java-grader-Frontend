@@ -31,11 +31,15 @@ if page == "Submit Lab":
             st.error(f"Connection error: {e}")
     ####################################################################################
     lab_id = st.selectbox("Select Lab", ["lab05", "lab04", "lab03", "lab02", "lab01"])
-    
+    problem_id = st.selectbox("Select Problem", ["p1", "p2", "p3", "p4"])
     
     # File uploader for multiple .java files
     uploaded_files = st.file_uploader(
-        "Upload your .java files of the Campus Fleet Management System",
+        """
+        YOU MUST UPLOAD ALL REQUIRED .JAVA FILES FOR YOUR LAB PROBLEM.
+        YOU MUST ALSO UPLOAD YOUR FINAL SOLUTION ON MOODLE TO GET FULL CREDIT.
+        Upload your .java files of the Campus Fleet Management System
+        """,
         type=["java"],
         accept_multiple_files=True,
         help="For labs with multiple classes, upload all required .java files"
@@ -58,9 +62,11 @@ if page == "Submit Lab":
             # Send to backend
             with st.spinner("Grading your submission..."):
                 try:
+                    # Combine them for the backend: "lab06_p1" or just "lab05"
+                    final_lab_id = f"{lab_id}_{problem_id}" if problem_id != "none" else lab_id
                     payload = {
                         "student_id": student_id,
-                        "lab_id": lab_id,
+                        "lab_id": final_lab_id,
                         "code": combined_code
                     }
                     resp = requests.post(f"{API_URL}/grade", json=payload, timeout=30)
