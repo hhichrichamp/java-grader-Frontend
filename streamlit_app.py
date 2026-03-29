@@ -57,14 +57,13 @@ if page == "Submit Lab":
         # For older labs that don't have sub-problems
         problem_id = "none"
 
-    # Track lab/problem selection to reset uploader and clear result when it changes
+    # Track lab/problem selection — clear grade result when student switches lab/problem
     current_selection = f"{lab_id}_{problem_id}"
     if st.session_state.get("last_selection") != current_selection:
         st.session_state["last_selection"] = current_selection
-        st.session_state["file_uploader_key"] = current_selection
-        st.session_state["last_grade_result"] = None  # Clear old result on new selection
+        st.session_state["last_grade_result"] = None
 
-    # File uploader for multiple .java files — key resets it when lab/problem changes
+    # File uploader — uploading new files naturally replaces the previous ones
     uploaded_files = st.file_uploader(
         """
         YOU MUST UPLOAD ALL REQUIRED .JAVA FILES FOR YOUR LAB PROBLEM.
@@ -73,8 +72,7 @@ if page == "Submit Lab":
         """,
         type=["java"],
         accept_multiple_files=True,
-        help="For labs with multiple classes, upload all required .java files",
-        key=st.session_state.get("file_uploader_key", "default_uploader")
+        help="For labs with multiple classes, upload all required .java files"
     )
     #######################################################################################
     if st.button("Submit", type="primary"):
@@ -105,24 +103,21 @@ if page == "Submit Lab":
                     
                     if resp.status_code == 200:
                         result = resp.json()
-                        # Store result in session state so it persists across reruns
                         st.session_state["last_grade_result"] = result
                         st.session_state["last_grade_selection"] = current_selection
-                        # Bump uploader key to clear files, then rerun
-                        st.session_state["file_uploader_key"] = f"{current_selection}_submitted_{result['score']}"
-                        st.rerun()
                     else:
                         st.error(f"Error {resp.status_code}: {resp.json().get('detail', 'Unknown error')}")
                 except Exception as e:
                     st.error(f"Submission failed: {e}")
 
-    # ── Display last grading result persistently ──
-    if st.session_state.get("last_grade_result"):
+    # ── Display last grading result persistently (cleared when lab/problem changes) ──
+    if st.session_state.get("last_grade_result") and \
+       st.session_state.get("last_grade_selection") == current_selection:
         result = st.session_state["last_grade_result"]
         st.divider()
         st.success(f"✅ Graded! Score: **{result['score']}/{result['max_score']}**")
         st.text_area("Feedback", result["feedback"], height=400)
-    # ─────────────────────────────────────────────
+    # ──────────────────────────────────────────────────────────────────────────────────
 
 
 # ========== VIEW MY GRADES PAGE ==========
