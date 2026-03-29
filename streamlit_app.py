@@ -9,7 +9,7 @@ API_URL = "https://java-grader-backend.fly.dev"  # Update with your actual Fly.i
 st.title("☕ Prof. Haikel Hichri Java Lab")
 
 # Sidebar navigation
-page = st.sidebar.radio("Navigation", ["Submit Lab", "Admin Dashboard"])
+page = st.sidebar.radio("Navigation", ["Submit Lab", "View My Grades", "Admin Dashboard"])
 
 # ========== SUBMIT LAB PAGE ==========
 if page == "Submit Lab":
@@ -30,10 +30,10 @@ if page == "Submit Lab":
         except Exception as e:
             st.error(f"Connection error: {e}")
     ####################################################################################
-    lab_id = st.selectbox("Select Lab", ["lab06", "lab05", "lab04", "lab03", "lab02", "lab01"])
+    lab_id = st.selectbox("Select Lab", ["lab07", "lab06", "lab05", "lab04", "lab03", "lab02", "lab01"])
     # 2. Select Problem (only show for Lab 06 or others with multiple problems)
     problem_id = "none"
-    if lab_id == "lab06":
+    if lab_id == "lab06" or lab_id == "lab07":  # Assuming lab07 also has multiple problems
         problem_id = st.selectbox("Select Problem", ["p1", "p2", "p3", "p4"])
     else:
         # For older labs that don't have sub-problems
@@ -85,6 +85,7 @@ if page == "Submit Lab":
                         st.error(f"Error {resp.status_code}: {resp.json().get('detail', 'Unknown error')}")
                 except Exception as e:
                     st.error(f"Submission failed: {e}")
+
 
 # ========== VIEW MY GRADES PAGE ==========
 elif page == "View My Grades":
