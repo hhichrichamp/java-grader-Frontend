@@ -25,7 +25,7 @@ if page == "Submit Lab":
             if resp.status_code == 200:
                 student_name = resp.json()["name"]
                 st.success(f"✅ Welcome, **{student_name}**!")
-                
+
                 # ── Show previous grades immediately after login ──
                 try:
                     grades_resp = requests.get(f"{API_URL}/student/{student_id}/submissions")
@@ -43,8 +43,6 @@ if page == "Submit Lab":
                     st.warning(f"Could not load previous grades: {ge}")
                 # ─────────────────────────────────────────────────
 
-
-
             else:
                 st.error("❌ Student ID not found. Please check with your instructor.")
         except Exception as e:
@@ -58,10 +56,14 @@ if page == "Submit Lab":
     else:
         # For older labs that don't have sub-problems
         problem_id = "none"
-    # clear and delete previous submitted files, before asking for new files to upload, to avoid confusion for students
-    st.session_state["uploaded_files"] = None
-        
-    # File uploader for multiple .java files
+
+    # Track lab/problem selection to reset uploader when it changes
+    current_selection = f"{lab_id}_{problem_id}"
+    if st.session_state.get("last_selection") != current_selection:
+        st.session_state["last_selection"] = current_selection
+        st.session_state["file_uploader_key"] = current_selection
+
+    # File uploader for multiple .java files — key resets it when lab/problem changes
     uploaded_files = st.file_uploader(
         """
         YOU MUST UPLOAD ALL REQUIRED .JAVA FILES FOR YOUR LAB PROBLEM.
@@ -70,7 +72,8 @@ if page == "Submit Lab":
         """,
         type=["java"],
         accept_multiple_files=True,
-        help="For labs with multiple classes, upload all required .java files"
+        help="For labs with multiple classes, upload all required .java files",
+        key=st.session_state.get("file_uploader_key", "default_uploader")
     )
     #######################################################################################
     if st.button("Submit", type="primary"):
@@ -103,6 +106,9 @@ if page == "Submit Lab":
                         result = resp.json()
                         st.success(f"✅ Graded! Score: **{result['score']}/{result['max_score']}**")
                         st.text_area("Feedback", result["feedback"], height=400)
+                        # Clear uploaded files after successful submission
+                        st.session_state["file_uploader_key"] = f"{current_selection}_submitted_{result['score']}"
+                        st.rerun()
                     else:
                         st.error(f"Error {resp.status_code}: {resp.json().get('detail', 'Unknown error')}")
                 except Exception as e:
