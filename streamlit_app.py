@@ -38,10 +38,13 @@ if page == "Submit Lab":
     else:
         # For older labs that don't have sub-problems
         problem_id = "none"
-    # clear and delete previous submitted files, before asking for new files to upload, to avoid confusion for students
-    st.session_state["uploaded_files"] = None
-      
-    # File uploader for multiple .java files
+    # Initialize uploader key
+    if "uploader_key" not in st.session_state:
+        st.session_state["uploader_key"] = 0
+    if "prev_file_names" not in st.session_state:
+        st.session_state["prev_file_names"] = set()
+
+    # File uploader
     uploaded_files = st.file_uploader(
         """
         YOU MUST UPLOAD ALL REQUIRED .JAVA FILES FOR YOUR LAB PROBLEM.
@@ -50,8 +53,24 @@ if page == "Submit Lab":
         """,
         type=["java"],
         accept_multiple_files=True,
-        help="For labs with multiple classes, upload all required .java files"
+        help="For labs with multiple classes, upload all required .java files",
+        key=f"file_uploader_{st.session_state['uploader_key']}"
     )
+
+    # If new files were added on top of existing ones, reset and keep only the new ones
+    if uploaded_files:
+        current_names = {f.name for f in uploaded_files}
+        prev_names = st.session_state["prev_file_names"]
+        new_names = current_names - prev_names
+        if prev_names and new_names:
+            # Student added new files on top of old ones — reset the widget
+            st.session_state["uploader_key"] += 1
+            st.session_state["prev_file_names"] = set()
+            st.rerun()
+        else:
+            st.session_state["prev_file_names"] = current_names
+    else:
+        st.session_state["prev_file_names"] = set()
     #######################################################################################
     if st.button("Submit", type="primary"):
         if not student_id:
