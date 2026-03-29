@@ -9,7 +9,7 @@ API_URL = "https://java-grader-backend.fly.dev"  # Update with your actual Fly.i
 st.title("☕ Prof. Haikel Hichri Java Lab")
 
 # Sidebar navigation
-page = st.sidebar.radio("Navigation", ["Submit Lab", "View My Grades", "Admin Dashboard"])
+page = st.sidebar.radio("Navigation", ["Submit Lab", "Admin Dashboard"])
 
 # ========== SUBMIT LAB PAGE ==========
 if page == "Submit Lab":
@@ -25,6 +25,26 @@ if page == "Submit Lab":
             if resp.status_code == 200:
                 student_name = resp.json()["name"]
                 st.success(f"✅ Welcome, **{student_name}**!")
+                
+                # ── Show previous grades immediately after login ──
+                try:
+                    grades_resp = requests.get(f"{API_URL}/student/{student_id}/submissions")
+                    if grades_resp.status_code == 200:
+                        grades_data = grades_resp.json()
+                        if grades_data.get("submissions"):
+                            st.subheader("📊 Your Previous Grades")
+                            df_grades = pd.DataFrame(grades_data["submissions"])
+                            st.dataframe(df_grades, use_container_width=True)
+                        else:
+                            st.info("📭 No previous submissions found.")
+                    else:
+                        st.warning("Could not load previous grades.")
+                except Exception as ge:
+                    st.warning(f"Could not load previous grades: {ge}")
+                # ─────────────────────────────────────────────────
+
+
+
             else:
                 st.error("❌ Student ID not found. Please check with your instructor.")
         except Exception as e:
@@ -38,7 +58,9 @@ if page == "Submit Lab":
     else:
         # For older labs that don't have sub-problems
         problem_id = "none"
-    
+    # clear and delete previous submitted files, before asking for new files to upload, to avoid confusion for students
+    st.session_state["uploaded_files"] = None
+        
     # File uploader for multiple .java files
     uploaded_files = st.file_uploader(
         """
