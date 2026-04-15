@@ -48,10 +48,10 @@ if page == "Submit Lab":
         except Exception as e:
             st.error(f"Connection error: {e}")
     ####################################################################################
-    lab_id = st.selectbox("Select Lab", ["lab07", "lab06", "lab05", "lab04", "lab03", "lab02", "lab01"])
+    lab_id = st.selectbox("Select Lab", ["lab08", "lab07", "lab06", "lab05", "lab04", "lab03", "lab02", "lab01"])
     # 2. Select Problem (only show for Lab 06 or others with multiple problems)
     problem_id = "none"
-    if lab_id == "lab06" or lab_id == "lab07":  # Assuming lab07 also has multiple problems
+    if lab_id == "lab06" or lab_id == "lab07" or lab_id == "lab08":  # Assuming lab07 also has multiple problems
         problem_id = st.selectbox("Select Problem", ["p1", "p2", "p3", "p4"])
     else:
         # For older labs that don't have sub-problems
