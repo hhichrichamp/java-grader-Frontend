@@ -47,6 +47,7 @@ if page == "Submit Lab":
                 st.error("❌ Student ID not found. Please check with your instructor.")
         except Exception as e:
             st.error(f"Connection error: {e}")
+            
     ####################################################################################
     lab_id = st.selectbox("Select Lab", ["lab09", "lab08", "lab07", "lab06", "lab05", "lab04", "lab03", "lab02", "lab01"])
     # 2. Select Problem (only show for Lab 06 or others with multiple problems)
