@@ -66,7 +66,7 @@ if page == "Submit Lab":
     uploaded_files = st.file_uploader(
         """
         FOR LAB10, YOU MUST UPLOAD ALL 4 PROBLEMS IN SEPARATE .JAVA FILES.: 
-        Upload each problem is a separate .java file: Lab10_p1.java, Lab10_p2.java, Lab10_p3.java, Lab10_p4.java
+        Upload each problem is a separate .java file: Lab10P1.java, Lab10P2.java, Lab10P3.java, Lab10P4.java
         """,
         type=["java"],
         accept_multiple_files=True,
