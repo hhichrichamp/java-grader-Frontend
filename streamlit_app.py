@@ -65,7 +65,7 @@ if page == "Submit Lab":
         """
         YOU MUST UPLOAD ALL REQUIRED .JAVA FILES FOR YOUR LAB PROBLEM.
         YOU MUST ALSO UPLOAD YOUR FINAL SOLUTION ON MOODLE TO GET FULL CREDIT.
-        Upload your .java files of the Campus Fleet Management System
+        For Lab10: Upload each problem is a separate .java file: Lab10_p1.java, Lab10_p2.java, Lab10_p3.java, Lab10_p4.java
         """,
         type=["java"],
         accept_multiple_files=True,
