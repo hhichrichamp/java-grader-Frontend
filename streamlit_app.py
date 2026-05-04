@@ -60,12 +60,13 @@ if page == "Submit Lab":
     # clear and delete previous submitted files, before asking for new files to upload, to avoid confusion for students
     st.session_state["uploaded_files"] = None
         
+    # YOU MUST UPLOAD ALL REQUIRED .JAVA FILES FOR YOUR LAB PROBLEM.
+    # YOU MUST ALSO UPLOAD YOUR FINAL SOLUTION ON MOODLE TO GET FULL CREDIT.
     # File uploader for multiple .java files
     uploaded_files = st.file_uploader(
         """
-        YOU MUST UPLOAD ALL REQUIRED .JAVA FILES FOR YOUR LAB PROBLEM.
-        YOU MUST ALSO UPLOAD YOUR FINAL SOLUTION ON MOODLE TO GET FULL CREDIT.
-        For Lab10: Upload each problem is a separate .java file: Lab10_p1.java, Lab10_p2.java, Lab10_p3.java, Lab10_p4.java
+        FOR LAB10, YOU MUST UPLOAD ALL 4 PROBLEMS IN SEPARATE .JAVA FILES.: 
+        Upload each problem is a separate .java file: Lab10_p1.java, Lab10_p2.java, Lab10_p3.java, Lab10_p4.java
         """,
         type=["java"],
         accept_multiple_files=True,
