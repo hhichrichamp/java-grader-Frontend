@@ -49,14 +49,13 @@ if page == "Submit Lab":
             st.error(f"Connection error: {e}")
             
     ####################################################################################
-    lab_id = st.selectbox("Select Lab", ["lab10",  "lab09", "lab08", "lab07", "lab06", "lab05", "lab04", "lab03", "lab02", "lab01"])
+    # lab_id = st.selectbox("Select Lab", ["lab10",  "lab09", "lab08", "lab07", "lab06", "lab05", "lab04", "lab03", "lab02", "lab01"])
+    lab_id = st.selectbox("Select Lab", [ "lab01"])
+
     # 2. Select Problem (only show for Lab 06 or others with multiple problems)
     problem_id = "none"
-    if lab_id == "lab06" or lab_id == "lab07" or lab_id == "lab08" or lab_id == "lab09" or lab_id == "lab10":  # Assuming lab07 also has multiple problems
-        problem_id = st.selectbox("Select Problem", ["p1", "p2", "p3", "p4"])
-    else:
-        # For older labs that don't have sub-problems
-        problem_id = "none"
+    problem_id = st.selectbox("Select Problem", ["p1", "p2", "p3", "p4"])
+    
     # clear and delete previous submitted files, before asking for new files to upload, to avoid confusion for students
     st.session_state["uploaded_files"] = None
         
@@ -65,7 +64,7 @@ if page == "Submit Lab":
     # File uploader for multiple .java files
     uploaded_files = st.file_uploader(
         """
-        FOR LAB10, YOU MUST UPLOAD ALL 4 PROBLEMS IN SEPARATE .JAVA FILES.: 
+        YOU MUST UPLOAD ALL 4 PROBLEMS IN SEPARATE .JAVA FILES.: 
         Upload each problem is a separate .java file: Lab10P1.java, Lab10P2.java, Lab10P3.java, Lab10P4.java
         """,
         type=["java"],
