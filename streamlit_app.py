@@ -50,7 +50,7 @@ if page == "Submit Lab":
             
     ####################################################################################
     # lab_id = st.selectbox("Select Lab", ["lab10",  "lab09", "lab08", "lab07", "lab06", "lab05", "lab04", "lab03", "lab02", "lab01"])
-    lab_id = st.selectbox("Select Lab", [ "lab02" ])
+    lab_id = st.selectbox("Select Lab", ["lab03 ,"lab02" ])
 
     # 2. Select Problem (only show for Lab 06 or others with multiple problems)
     problem_id = "none"
@@ -65,7 +65,7 @@ if page == "Submit Lab":
     uploaded_files = st.file_uploader(
         """
         YOU MUST UPLOAD ALL 4 PROBLEMS IN SEPARATE .JAVA FILES.: 
-        Upload each problem is a separate .java file: Lab10P1.java, Lab10P2.java, Lab10P3.java, Lab10P4.java
+        Upload each problem is a separate .java file: Lab02P1.java, Lab02P2.java, Lab02P3.java, Lab02P4.java
         """,
         type=["java"],
         accept_multiple_files=True,
