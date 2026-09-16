@@ -50,7 +50,7 @@ if page == "Submit Lab":
             
     ####################################################################################
     # lab_id = st.selectbox("Select Lab", ["lab10",  "lab09", "lab08", "lab07", "lab06", "lab05", "lab04", "lab03", "lab02", "lab01"])
-    lab_id = st.selectbox("Select Lab", ["lab04" , "lab03" ,"lab02" ])
+    lab_id = st.selectbox("Select Lab", ["lab05" , "lab04" , "lab03" ,"lab02" ])
 
     # 2. Select Problem 
     problem_id = "none"
